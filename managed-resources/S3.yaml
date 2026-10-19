@@ -1,0 +1,14 @@
+apiVersion: s3.aws.m.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: launchpad-smoke-test-unique123
+  namespace: crossplane-system
+spec:
+  forProvider:
+    region: ap-south-1
+    tags:
+      Project: LaunchPad
+      Purpose: SmokeTest
+  providerConfigRef:
+    name: default
+    kind: ProviderConfig
