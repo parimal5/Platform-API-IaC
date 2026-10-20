@@ -26,4 +26,4 @@ jobs:
         run: pip install yamllint
 
       - name: Lint Crossplane YAML
-        run: yamllint -s crossplane/
+        run: yamllint crossplane/
