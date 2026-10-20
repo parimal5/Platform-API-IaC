@@ -1,0 +1,13 @@
+apiVersion: platform.parimal.com/v1alpha1
+kind: XS3Bucket
+metadata:
+  name: my-s3-bucket
+  namespace: crossplane-system
+spec:
+  bucketName: xs3-parimal-platform-5678u
+  region: us-east-1
+  versioningConfiguration:
+    status: Enabled
+  tags:
+    team: payments
+    application: demo-app

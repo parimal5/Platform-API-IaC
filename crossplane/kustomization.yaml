@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - providers/provider-aws-s3.yaml
+  - functions/function-patch-and-transform.yaml
+  - providers/provider-config.yaml
+  - xrd/s3-bucket-xrd.yaml
+  - compositions/s3-bucket-composition.yaml
+  - claims/s3-bucket-claim.yaml

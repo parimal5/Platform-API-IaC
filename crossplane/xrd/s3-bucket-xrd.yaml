@@ -19,8 +19,6 @@ spec:
             spec:
               type: object
               properties:
-                namespace:
-                  type: string
                 region:
                   type: string
                 bucketName:
@@ -38,7 +36,8 @@ spec:
                     - status
                 tags:
                   type: object
+                  additionalProperties:
+                    type: string
               required:
                 - region
                 - bucketName
-                - namespace

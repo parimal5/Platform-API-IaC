@@ -29,7 +29,7 @@ spec:
           - name: common-namespace
             patches:
               - type: FromCompositeFieldPath
-                fromFieldPath: spec.namespace
+                fromFieldPath: metadata.namespace
                 toFieldPath: metadata.namespace
         resources:
           #! S3 Bucket
@@ -50,6 +50,7 @@ spec:
                     managed-by: crossplane
                 providerConfigRef: # which aws creds it should used
                   name: default
+                  kind: ProviderConfig
             # Takes values from XR(auto created using XRD and Claim) and patch the MR
             patches:
               - type: FromCompositeFieldPath
@@ -84,9 +85,10 @@ spec:
                     matchControllerRef: true
                   rule:
                     - applyServerSideEncryptionByDefault:
-                        - sseAlgorithm: AES256
+                        sseAlgorithm: AES256
                 providerConfigRef:
                   name: default
+                  kind: ProviderConfig
             patches:
               - type: PatchSet
                 patchSetName: common-region
@@ -111,6 +113,7 @@ spec:
                   restrictPublicBuckets: true
                 providerConfigRef:
                   name: default
+                  kind: ProviderConfig
             patches:
               - type: PatchSet
                 patchSetName: common-region
