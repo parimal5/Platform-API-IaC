@@ -1,0 +1,18 @@
+apiVersion: platform.parimal.com/v1alpha1
+kind: XS3Bucket
+metadata:
+  name: demo-app-storage
+  # Use the namespace assigned to your team for platform requests.
+  namespace: crossplane-system
+spec:
+  # S3 bucket names must be lowercase and globally unique across AWS.
+  bucketName: launchpad-demo-unique-name
+  # AWS region in which the bucket is created.
+  region: ap-south-1
+  # Supported values: Enabled, Suspended, or Disabled.
+  versioningConfiguration:
+    status: Enabled
+  # Optional application/team metadata. Tag values must be strings.
+  tags:
+    team: platform
+    application: demo-app
