@@ -46,6 +46,7 @@ spec:
               spec:
                 forProvider:
                   region: us-east-1 # default values if user does not provide any
+
                   tags:
                     managed-by: crossplane
                 providerConfigRef: # which aws creds it should used
@@ -119,3 +120,33 @@ spec:
                 patchSetName: common-region
               - type: PatchSet
                 patchSetName: common-namespace
+
+          #! 4. Bucket Versioning
+          - name: bucket-versioning
+            base:
+              apiVersion: s3.aws.m.upbound.io/v1beta1
+              kind: BucketVersioning
+              metadata:
+                namespace: crossplane-system
+              spec:
+                forProvider:
+                  region: ap-south-1
+                  bucketSelector:
+                    matchControllerRef: true
+                  versioningConfiguration:
+                    status: Disabled
+                providerConfigRef:
+                  name: default
+                  kind: ProviderConfig
+            patches:
+              - type: PatchSet
+                patchSetName: common-region
+
+              - type: PatchSet
+                patchSetName: common-namespace
+
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.versioningConfiguration.status
+                toFieldPath: spec.forProvider.versioningConfiguration.status
+                policy:
+                  fromFieldPath: Required
