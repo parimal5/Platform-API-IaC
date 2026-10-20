@@ -32,3 +32,22 @@ So if we need to create resource like AWS S3 thenwe are gogin to use
    Provider config tells your config on wich kind of creds it should use to authenticate to AWS
 
    See more (example here)[https://marketplace.upbound.io/providers/upbound/provider-family-aws/v2.9.1/resources/aws.m.upbound.io/ProviderConfig/v1beta1]
+
+### How the crossplane work at runtime
+
+The crossplane has 5 main component
+
+1. XRD - Schema [Terraform Module]
+2. Claim - Created by developer to supply input to variables [Terraform tfvars]
+3. XR - This is automtically created by crossplane which contain the vaules from claim
+4. Managed Resoruce - Theses are crossplane resoruces that actuially create the AWS resoruce like S3, EC2 etc
+5. Compositions - now this help pass the vaule we have in XR that we got from Claim to Managed Resource.
+
+So Basic flow is
+
+- Developer create a Claim
+- Claim first looks at XRD to create an XR.
+- This XR now contain the bluprint what our resoruce looks like from XRD and it get vaules from Claim.
+- Now the Compostiion allow us to patch or override the vaules from XR to the Managed Resoruce.
+
+> One small nuance: the XR contains the requested values, but the Composition can also apply defaults, transformations, and other logic. So its output isn't necessarily just a direct copy of the Claim.
