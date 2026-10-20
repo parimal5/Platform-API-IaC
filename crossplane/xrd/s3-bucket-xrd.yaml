@@ -32,8 +32,6 @@ spec:
                         - Enabled
                         - Suspended
                         - Disabled
-                  required:
-                    - status
                 tags:
                   type: object
                   additionalProperties:
