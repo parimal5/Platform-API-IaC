@@ -8,7 +8,7 @@ spec:
   # S3 bucket names must be lowercase and globally unique across AWS.
   bucketName: launchpad-demo-unique-name
   # AWS region in which the bucket is created.
-  region: ap-south-1
+  region: us-east-1
   # Supported values: Enabled, Suspended, or Disabled.
   versioningConfiguration:
     status: Enabled

@@ -39,7 +39,7 @@ metadata:
   namespace: crossplane-system
 spec:
   bucketName: launchpad-demo-unique-name
-  region: ap-south-1
+  region: us-east-1
   versioningConfiguration:
     status: Enabled
   tags:
