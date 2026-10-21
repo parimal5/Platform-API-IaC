@@ -10,5 +10,5 @@ spec:
       Project: LaunchPad
       Purpose: SmokeTest
   providerConfigRef:
-    name: default
-    kind: ProviderConfig
+    name: cluster-provider-aws-s3
+    kind: ClusterProviderConfig
