@@ -39,10 +39,10 @@ spec:
               apiVersion: s3.aws.m.upbound.io/v1beta1
               kind: Bucket
               metadata:
+                namespace: crossplane-system
                 annotations:
                   # used for naming the bucket its default value can be completely removed and add a patch
                   crossplane.io/external-name: my-default-s3-bucket
-                  namespace: crossplane-system
               spec:
                 forProvider:
                   region: us-east-1 # default values if user does not provide any
@@ -105,7 +105,7 @@ spec:
                 namespace: crossplane-system
               spec:
                 forProvider:
-                  region: ap-south-1
+                  region: us-east-1
                   bucketSelector:
                     matchControllerRef: true
                   blockPublicAcls: true
@@ -130,7 +130,7 @@ spec:
                 namespace: crossplane-system
               spec:
                 forProvider:
-                  region: ap-south-1
+                  region: us-east-1
                   bucketSelector:
                     matchControllerRef: true
                   versioningConfiguration:
