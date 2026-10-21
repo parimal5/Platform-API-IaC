@@ -50,8 +50,8 @@ spec:
                   tags:
                     managed-by: crossplane
                 providerConfigRef: # which aws creds it should used
-                  name: default
-                  kind: ProviderConfig
+                  name: cluster-provider-aws-s3
+                  kind: ClusterProviderConfig
             # Takes values from XR(auto created using XRD and Claim) and patch the MR
             patches:
               - type: FromCompositeFieldPath
@@ -88,8 +88,8 @@ spec:
                     - applyServerSideEncryptionByDefault:
                         sseAlgorithm: AES256
                 providerConfigRef:
-                  name: default
-                  kind: ProviderConfig
+                  name: cluster-provider-aws-s3
+                  kind: ClusterProviderConfig
             patches:
               - type: PatchSet
                 patchSetName: common-region
@@ -113,8 +113,8 @@ spec:
                   ignorePublicAcls: true
                   restrictPublicBuckets: true
                 providerConfigRef:
-                  name: default
-                  kind: ProviderConfig
+                  name: cluster-provider-aws-s3
+                  kind: ClusterProviderConfig
             patches:
               - type: PatchSet
                 patchSetName: common-region
@@ -136,8 +136,8 @@ spec:
                   versioningConfiguration:
                     status: Disabled
                 providerConfigRef:
-                  name: default
-                  kind: ProviderConfig
+                  name: cluster-provider-aws-s3
+                  kind: ClusterProviderConfig
             patches:
               - type: PatchSet
                 patchSetName: common-region
