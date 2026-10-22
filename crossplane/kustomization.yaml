@@ -6,4 +6,4 @@ resources:
   - providers/cluster-provider-config.yaml
   - xrd/s3-bucket-xrd.yaml
   - compositions/s3-bucket-composition.yaml
-  - claims/s3-bucket-claim.yaml
+  # - claims/s3-bucket-claim.yaml
