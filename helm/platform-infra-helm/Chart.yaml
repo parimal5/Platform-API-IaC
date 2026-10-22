@@ -1,0 +1,5 @@
+apiVersion: v2
+name: launchpad-platform
+description: Shared Crossplane capabilities for LaunchPad
+type: application
+version: 0.1.0
