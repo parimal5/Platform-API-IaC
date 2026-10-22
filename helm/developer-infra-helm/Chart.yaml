@@ -1,0 +1,6 @@
+apiVersion: v2
+name: launchpad-s3-bucket
+description: Developer Helm chart for provisioning AWS S3 buckets through LaunchPad
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

@@ -1,0 +1,13 @@
+
+apiVersion: platform.parimal.com/v1alpha1
+kind: XS3Bucket
+metadata:
+  name: {{ .Values.metadata.name | quote }}
+  namespace: {{ .Values.metadata.namespace | quote }}
+spec:
+  bucketName: {{ .Values.spec.bucketName | quote }}
+  region: {{ .Values.spec.region | quote }}
+  versioningConfiguration:
+    status: {{ if .Values.spec.versioning.enable }}"Enabled"{{ else }}"Suspended"{{ end }}
+  tags:
+{{- toYaml .Values.spec.tags | nindent 4 }}

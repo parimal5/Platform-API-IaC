@@ -1,0 +1,14 @@
+metadata:
+  name: parimal-s3-bucket-1
+  namespace: parimal-s3-bucket-1
+
+spec:
+  bucketName: xs3-parimal-platform-5678u
+  region: us-east-1
+
+  versioning:
+    enable: true
+
+  tags:
+    team: payments
+    application: demo-app
