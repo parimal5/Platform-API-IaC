@@ -50,7 +50,7 @@ spec:
                   tags:
                     managed-by: crossplane
                 providerConfigRef: # which aws creds it should used
-                  name: cluster-provider-aws-s3
+                  name: cluster-provider-aws
                   kind: ClusterProviderConfig
             # Takes values from XR(auto created using XRD and Claim) and patch the MR
             patches:
@@ -88,7 +88,7 @@ spec:
                     - applyServerSideEncryptionByDefault:
                         sseAlgorithm: AES256
                 providerConfigRef:
-                  name: cluster-provider-aws-s3
+                  name: cluster-provider-aws
                   kind: ClusterProviderConfig
             patches:
               - type: PatchSet
@@ -113,7 +113,7 @@ spec:
                   ignorePublicAcls: true
                   restrictPublicBuckets: true
                 providerConfigRef:
-                  name: cluster-provider-aws-s3
+                  name: cluster-provider-aws
                   kind: ClusterProviderConfig
             patches:
               - type: PatchSet
@@ -136,7 +136,7 @@ spec:
                   versioningConfiguration:
                     status: Disabled
                 providerConfigRef:
-                  name: cluster-provider-aws-s3
+                  name: cluster-provider-aws
                   kind: ClusterProviderConfig
             patches:
               - type: PatchSet
