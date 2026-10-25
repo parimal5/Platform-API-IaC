@@ -1,6 +1,6 @@
 metadata:
-  name: parimal-s3-bucket-1
-  namespace: parimal-s3-bucket-1
+  name: parimal-s3-bucket-test
+  namespace: launchpad-test
 
 spec:
   bucketName: xs3-parimal-platform-5678u
