@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - providers/provider-aws-s3.yaml
   - functions/function-patch-and-transform.yaml
+  - functions/function-go-templating.yaml
   - providers/cluster-provider-config.yaml
   - xrd/s3-bucket-xrd.yaml
   - compositions/s3-bucket-composition.yaml
