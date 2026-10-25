@@ -32,6 +32,16 @@ spec:
                         - Enabled
                         - Suspended
                         - Disabled
+                bucketPolicy:
+                  type: object
+                  properties:
+                    accesMode:
+                      type: string
+                      enum:
+                        - ReadOnly
+                        - ReadWrite
+                  required:
+                    - accessMode
                 tags:
                   type: object
                   additionalProperties:
@@ -39,3 +49,4 @@ spec:
               required:
                 - region
                 - bucketName
+                - bucketPolicy
