@@ -4,3 +4,11 @@ metadata:
   name: upbound-function-patch-and-transform
 spec:
   package: xpkg.upbound.io/upbound/function-patch-and-transform:v0.11.1
+
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Function
+metadata:
+  name: upbound-function-go-templating
+spec:
+  package: xpkg.upbound.io/upbound/function-go-templating:v0.13.1
