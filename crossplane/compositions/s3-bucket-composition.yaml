@@ -105,7 +105,7 @@ spec:
                 namespace: crossplane-system
               spec:
                 forProvider:
-                  region: ap-south-1
+                  region: us-east-1
                   bucketSelector:
                     matchControllerRef: true
                   blockPublicAcls: true
@@ -130,7 +130,7 @@ spec:
                 namespace: crossplane-system
               spec:
                 forProvider:
-                  region: ap-south-1
+                  region: us-east-1
                   bucketSelector:
                     matchControllerRef: true
                   versioningConfiguration:
@@ -150,3 +150,63 @@ spec:
                 toFieldPath: spec.forProvider.versioningConfiguration.status
                 policy:
                   fromFieldPath: Required
+
+          #! Bucket Policy
+          - name: generate-bucket-policy
+            functionRef:
+              name: upbound-function-go-templating
+            input:
+              apiVersion: gotemplating.fn.crossplane.io/v1beta1
+              kind: GoTemplate
+              source: Inline
+              inline:
+                options:
+                  - missingkey=error
+                template: |
+                  {{- $xr := .observed.composite.resource }} # Load complete XR
+
+                  {{- $namespace := $xr.metadata.namespace }}
+                  {{- $region := $xr.spec.region }}
+                  {{- $bucket := $xr.spec.bucketName }}
+                  {{- $mode := $xr.spec.bucketPolicy.accessMode }}
+
+                  apiVersion: s3.aws.m.upbound.io/v1beta1
+                  kind: BucketPolicy
+                  metadata:
+                    name: {{ $xr.metadata.name }}-policy
+                    namespace: {{ $namespace }}
+                    annotations:
+                      gotemplating.fn.crossplane.io/composition-resource-name: bucket-policy
+                    spec:
+                      forProvider:
+                        region: {{ $xr.spec.region }}
+                        bucketSelector:
+                          matchControllerRef: true
+                        policy: |
+                          {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                              {
+                                "Effect": "Allow",
+                                "Principal": {
+                                  "AWS": "arn:aws:iam::896644658747:role/{{ $namespace }}-sa"
+                                },
+                                "Action": [
+                                  "s3:GetObject"
+                                  {{ if eq $mode "ReadWrite" }},"s3:PutObject"{{ end }}
+                                ],
+                                "Resource": "arn:aws:s3:::{{ $bucket }}/*"
+                              },
+                              {
+                                "Effect": "Allow",
+                                "Principal": {
+                                  "AWS": "arn:aws:iam::896644658747:role/{{ $namespace }}-sa"
+                                },
+                                "Action": "s3:ListBucket",
+                                "Resource": "arn:aws:s3:::{{ $bucket }}"
+                              }
+                            ]
+                          }
+                      providerConfigRef:
+                        name: cluster-provider-aws
+                        kind: ClusterProviderConfig
