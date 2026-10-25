@@ -1,13 +1,15 @@
 apiVersion: platform.parimal.com/v1alpha1
 kind: XS3Bucket
 metadata:
-  name: parimal-s3-bucket-1
-  namespace: parimal-s3-bucket-1
+  name: s3-bucket-demo
+  namespace: s3-bucket-infra
 spec:
   bucketName: xs3-parimal-platform-5678u
   region: us-east-1
   versioningConfiguration:
     status: Enabled
+  bucketPolicy:
+    accessMode: ReadWrite
   tags:
     team: payments
     application: demo-app
