@@ -12,6 +12,9 @@ spec:
   # Supported values: Enabled, Suspended, or Disabled.
   versioningConfiguration:
     status: Enabled
+  # ReadOnly allows listing and reading; ReadWrite also allows writing objects.
+  bucketPolicy:
+    accessMode: ReadWrite
   # Optional application/team metadata. Tag values must be strings.
   tags:
     team: platform
