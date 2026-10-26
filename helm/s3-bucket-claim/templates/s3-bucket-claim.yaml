@@ -9,5 +9,7 @@ spec:
   region: {{ .Values.spec.region | quote }}
   versioningConfiguration:
     status: {{ if .Values.spec.versioning.enable }}"Enabled"{{ else }}"Suspended"{{ end }}
+  bucketPolicy:
+    accessMode: {{ .Values.spec.bucketPolicy.accessMode | quote }}
   tags:
 {{- toYaml .Values.spec.tags | nindent 4 }}

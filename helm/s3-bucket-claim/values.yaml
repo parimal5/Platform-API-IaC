@@ -9,6 +9,9 @@ spec:
   versioning:
     enable: true
 
+  bucketPolicy:
+    accessMode: ReadWrite
+
   tags:
     team: payments
     application: demo-app
