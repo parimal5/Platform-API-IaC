@@ -16,3 +16,4 @@ The [platform architecture](docs/architecture.md) explains the responsibilities 
 - [S3 Bucket API](docs/s3-bucket.md) — API fields, constraints, access modes, and managed behavior.
 - [Platform architecture](docs/architecture.md) — component boundaries and reconciliation flow.
 - [Example claim](docs/examples/s3-bucket.yaml) — a complete Crossplane claim.
+.
