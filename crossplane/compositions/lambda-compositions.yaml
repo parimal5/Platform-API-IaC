@@ -1,0 +1,202 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: lambda-composition
+  labels:
+    provider: aws
+
+spec:
+  compositeTypeRef:
+    apiVersion: platform.parimal.com/v1alpha1
+    kind: XLambda
+
+  mode: Pipeline
+
+  pipeline:
+    - step: patch-and-transform
+      functionRef:
+        name: upbound-function-patch-and-transform
+      input:
+        apiVersion: pt.fn.crossplane.io/v1beta1
+        kind: Resources
+
+        patchSets:
+          - name: common-region
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.region
+                toFieldPath: spec.forProvider.region
+
+          - name: common-namespace
+            patches:
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.namespace
+                toFieldPath: metadata.namespace
+
+        resources:
+          #! Lambda execution role
+          - name: lambda-execution-role
+            base:
+              apiVersion: iam.aws.m.upbound.io/v1beta1
+              kind: Role
+              metadata:
+                name: placeholder
+                annotations:
+                  crossplane.io/external-name: placeholder
+              spec:
+                forProvider:
+                  description: Execution role managed by LaunchPad.
+                  assumeRolePolicy: |
+                    {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          },
+                          "Action": "sts:AssumeRole"
+                        }
+                      ]
+                    }
+                  managedPolicyArns:
+                    - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+                  tags: {}
+                providerConfigRef:
+                  kind: ClusterProviderConfig
+                  name: cluster-provider-aws
+
+            patches:
+              # Keep the Role in the XR's namespace.
+              - type: PatchSet
+                patchSetName: common-namespace
+
+              # Kubernetes Role MR name.
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.name
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "lp-%s-role"
+
+              # Actual AWS IAM role name.
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.annotations[crossplane.io/external-name]
+                transforms:
+                  - type: string
+                    string:
+                      type: Format
+                      fmt: "lp-%s-role"
+
+              # Optional developer tags.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.tags
+                toFieldPath: spec.forProvider.tags
+                policy:
+                  fromFieldPath: Optional
+
+          #! Lambda function
+          - name: lambda-function
+            base:
+              apiVersion: lambda.aws.m.upbound.io/v1beta1
+              kind: Function
+              metadata:
+                name: placeholder
+                annotations:
+                  crossplane.io/external-name: placeholder
+              spec:
+                forProvider:
+                  region: us-east-1
+                  runtime: python3.12
+                  handler: app.handler
+                  memorySize: 256
+                  timeout: 30
+
+                  s3Bucket: placeholder
+                  s3Key: placeholder
+
+                  environment:
+                    variables: {}
+
+                  tags: {}
+
+                  # Select the Role managed resource belonging
+                  # to this same XLambda composite.
+                  roleSelector:
+                    matchControllerRef: true
+
+                providerConfigRef:
+                  kind: ClusterProviderConfig
+                  name: cluster-provider-aws
+
+            patches:
+              # Keep the Function in the XR's namespace.
+              - type: PatchSet
+                patchSetName: common-namespace
+
+              # Kubernetes Function MR name.
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.name
+
+              # Actual AWS Lambda function name.
+              - type: FromCompositeFieldPath
+                fromFieldPath: metadata.name
+                toFieldPath: metadata.annotations[crossplane.io/external-name]
+
+              # AWS region.
+              - type: PatchSet
+                patchSetName: common-region
+
+              # Runtime.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.runtime
+                toFieldPath: spec.forProvider.runtime
+
+              # Handler.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.handler
+                toFieldPath: spec.forProvider.handler
+
+              # Memory allocation.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.memorySize
+                toFieldPath: spec.forProvider.memorySize
+
+              # Execution timeout.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.timeout
+                toFieldPath: spec.forProvider.timeout
+
+              # S3 deployment artifact.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.code.s3Bucket
+                toFieldPath: spec.forProvider.s3Bucket
+
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.code.s3Key
+                toFieldPath: spec.forProvider.s3Key
+
+              # Optional immutable S3 object version.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.code.s3ObjectVersion
+                toFieldPath: spec.forProvider.s3ObjectVersion
+                policy:
+                  fromFieldPath: Optional
+
+              # Optional environment variables.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.environment
+                toFieldPath: spec.forProvider.environment.variables
+                policy:
+                  fromFieldPath: Optional
+
+              # Optional tags.
+              - type: FromCompositeFieldPath
+                fromFieldPath: spec.tags
+                toFieldPath: spec.forProvider.tags
+                policy:
+                  fromFieldPath: Optional
