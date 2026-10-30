@@ -62,6 +62,14 @@ Crossplane has 5 main components:
 
 > **Note:** The Composition's output is not always a direct copy of the Claim. It can also apply defaults, transformations, and other logic.
 
+### Crossplane resource flow diagrams
+
+The first diagram shows the four main resources and how Crossplane connects them. The second highlights who defines, creates, and manages each resource.
+
+![Crossplane flow from XRD to XR, Composition, and managed resources](crossplane_flow.png)
+
+![Crossplane resource flow with ownership responsibilities](crossplane_xrd_xr_composition_mr_flow.png)
+
 ---
 
 ## 3. Functions
