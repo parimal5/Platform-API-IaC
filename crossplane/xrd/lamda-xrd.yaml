@@ -1,0 +1,88 @@
+apiVersion: apiextensions.crossplane.io/v2
+kind: CompositeResourceDefinition
+metadata:
+  # Crossplane requires the XRD's metadata.name to follow this exact convention: <plural>.<group>
+  name: xlambda.platform.parimal.com
+spec:
+  group: platform.parimal.com
+  names:
+    kind: XLambda
+    plural: xlambda
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                region:
+                  type: string
+                  description: AWS region for the Lambda function.
+                  enum:
+                    - us-east-1
+                    - us-west-1
+                    - ap-south-1
+                runtime:
+                  type: string
+                  description: Approved Lambda runtime.
+                  enum:
+                    - python3.12
+                    - nodejs22.x
+
+                handler:
+                  type: string
+                  description: Lambda handler entry point.
+                  minLength: 1
+
+                code:
+                  type: object
+                  description: Reference to the Lambda ZIP in S3.
+                  properties:
+                    s3Bucket:
+                      type: string
+                      minLength: 3
+                    s3Key:
+                      type: string
+                      minLength: 1
+                    s3ObjectVersion:
+                      type: string
+                      description: Optional immutable S3 object version.
+                  required:
+                    - s3Bucket
+                    - s3Key
+
+                memorySize:
+                  type: integer
+                  description: Memory allocation in MB.
+                  default: 256
+                  minimum: 128
+                  maximum: 1024
+
+                timeout:
+                  type: integer
+                  description: Maximum execution time in seconds.
+                  default: 30
+                  minimum: 1
+                  maximum: 60
+
+                environment:
+                  type: object
+                  description: Non-secret environment variables.
+                  additionalProperties:
+                    type: string
+
+                tags:
+                  type: object
+                  description: Application and ownership metadata.
+                  additionalProperties:
+                    type: string
+
+              required:
+                - region
+                - runtime
+                - handler
+                - code
