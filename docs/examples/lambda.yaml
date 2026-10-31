@@ -1,0 +1,36 @@
+apiVersion: platform.parimal.com/v1alpha1
+kind: XLambda
+metadata:
+  name: lambda-demo
+  # Use the namespace assigned to your team for platform requests.
+  namespace: lambda-infra
+spec:
+  # AWS region where the function is created. Supported: us-east-1, us-west-1, ap-south-1.
+  region: us-east-1
+  # Supported runtimes include python3.12 and nodejs22.x.
+  runtime: python3.12
+  # Module and function name for the Lambda entry point.
+  handler: app.handler
+
+  # Upload a Lambda-compatible ZIP to S3 before submitting this claim.
+  # This example references the existing bucket and object key.
+  code:
+    s3Bucket: parimal-s3-bucket-5320
+    s3Key: lambda-package-crossplane/lambda-package.zip
+    # Optional: pin a specific S3 object version for immutable deployments.
+    # s3ObjectVersion: "3HL4kqtJlcpXroDTDmjVBH40Nrjfkd"
+
+  # Optional settings; defaults are 256 MB and 30 seconds.
+  memorySize: 256
+  timeout: 30
+
+  # Optional non-secret environment variables. Do not store secrets here.
+  environment:
+    APP_ENV: test
+    PROJECT_NAME: launchpad
+
+  # Optional application/team metadata. Tag values must be strings.
+  tags:
+    team: platform
+    application: launchpad-demo
+    environment: test
