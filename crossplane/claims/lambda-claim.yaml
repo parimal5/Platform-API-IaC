@@ -1,0 +1,25 @@
+apiVersion: platform.parimal.com/v1alpha1
+kind: XLambda
+metadata:
+  name: lambda-demo
+  namespace: lambda-infra
+spec:
+  region: us-east-1
+  runtime: python3.12
+  handler: app.handler
+
+  code:
+    s3Bucket: parimal-s3-bucket-5320
+    s3Key: lambda-package-crossplane/lambda-package.zip
+
+  memorySize: 256
+  timeout: 30
+
+  environment:
+    APP_ENV: test
+    PROJECT_NAME: launchpad
+
+  tags:
+    team: platform
+    application: launchpad-demo
+    environment: test
